@@ -1,4 +1,13 @@
-![LinuxOps – DevOps Project](./unnamed.jpg)
+<p align="center">
+  <img src="https://i.imgur.com/YOUR_BANNER.jpg" alt="LinuxOps DevOps Project" width="90%">
+</p>
+
+## 📐 Filesystem Architecture Diagram
+
+<p align="center">
+  <img src="https://i.imgur.com/YOUR_DIAGRAM.jpg" alt="Linux Filesystem Diagram" width="85%">
+</p>
+
 
 # **LinuxOps – DevOps Project**
 
@@ -14,14 +23,6 @@ This repository contains a **practical LinuxOps / DevOps lab** focused on **real
 * Cleanup & hygiene
 
 > 🎯 **Goal**: Learn Linux by *doing*, not copy‑pasting.
-
----
-
-## 📌 Architecture & File Structure Diagram
-
-* **Reference Diagram (PDF)**: [Blank diagram.pdf](./Blank%20diagram.pdf)
-
-> Use this diagram as the **source of truth** for directory structure.
 
 ---
 
