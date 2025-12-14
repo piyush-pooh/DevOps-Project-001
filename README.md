@@ -1,54 +1,186 @@
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#2496ed', 'edgeLabelBackground':'#ffffff', 'tertiaryColor': '#f4f4f4'}}}%%
-graph LR
-    subgraph "External World"
-        AdminUser[👤 System Administrator<br/>(You)]
-        BackupDest[(📦 External Backup<br/>Destination)]
-    end
+![LinuxOps – DevOps Project](./unnamed.jpg)
 
-    subgraph "LinuxOps Lab - Production Server (Ubuntu)"
-        direction TB
+# **LinuxOps – DevOps Project**
 
-        subgraph "🛡️ Security Perimeter Layer"
-            SSH[🔑 Hardened SSH Daemon<br/>(Key-Based Auth Only)]
-            Firewall[🧱 UFW / iptables Firewall<br/>(Ports locked down)]
-        end
+### *Server Automation & Security | Hands-on Linux Lab*
 
-        subgraph "⚙️ Core Operations & Fundamentals"
-            RBAC[👥 User Management<br/>& RBAC Permissions]
-            Systemd[🚀 Custom systemd Service<br/>(Health Monitoring App)]
-            Logs[📄 Observability & Logging<br/>(journalctl & /var/log)]
-        end
+This repository contains a **practical LinuxOps / DevOps lab** focused on **real Linux fundamentals**:
 
-        subgraph "🤖 Automation & Maintenance Layer"
-            Cron[⏰ Cron Scheduler]
-            BashScripts[📜 Bash Automation Scripts<br/>(Backups, Log Rotation, Maintenance)]
-        end
-    end
+* User & group management
+* Permissions & ownership
+* Directory and file operations
+* Text processing (`sed`, `vi`)
+* System inspection commands
+* Cleanup & hygiene
 
-    %% Connections
-    AdminUser ====>|Secure Encrypted Connection| SSH
-    SSH --> Firewall
-    Firewall --> RBAC
+> 🎯 **Goal**: Learn Linux by *doing*, not copy‑pasting.
 
-    RBAC -->|Manages| Systemd
-    RBAC -->|Accesses| Logs
+---
 
-    Systemd -.->|Writes output to| Logs
+## 📌 Architecture & File Structure Diagram
 
-    Cron ====>|Triggers periodically| BashScripts
-    BashScripts -->|Reads/Rotates| Logs
-    BashScripts ---->|Periodically pushes data| BackupDest
+* **Reference Diagram (PDF)**: [Blank diagram.pdf](./Blank%20diagram.pdf)
 
-    %% Styling
-    classDef external fill:#f9f9f9,stroke:#333,stroke-width:2px,color:#333;
-    classDef security fill:#ffebee,stroke:#d32f2f,stroke-width:2px,color:#d32f2f;
-    classDef core fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#1976d2;
-    classDef automation fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#388e3c;
-    classDef container fill:#ffffff,stroke:#666,stroke-width:3px,color:#333,stroke-dasharray: 5 5;
+> Use this diagram as the **source of truth** for directory structure.
 
-    class AdminUser,BackupDest external;
-    class SSH,Firewall security;
-    class RBAC,Systemd,Logs core;
-    class Cron,BashScripts automation;
-    class LinuxOps Lab - Production Server (Ubuntu) container;
+---
+
+## 🚀 Quick Start (Run This First)
+
+### **Run Ubuntu Linux Container (Persistent & Long‑Term)**
+
+```bash
+docker run -dit \
+--name ubuntu-container \
+--hostname ubuntu-dev \
+--restart unless-stopped \
+--cpus="2" \
+--memory="4g" \
+--mount type=bind,source=/tmp/ubuntu-data,target=/data \
+-v /var/run/docker.sock:/var/run/docker.sock \
+-p 2222:22 \
+-p 8080:80 \
+--env TZ=Asia/Kolkata \
+--env LANG=en_US.UTF-8 \
+ubuntu:latest /bin/bash
+```
+
+Enter the container:
+
+```bash
+docker exec -it ubuntu-container bash
+```
+
+---
+
+## 🧠 Docker Parameters Explained
+
+| Parameter                                                | Description                               |
+| -------------------------------------------------------- | ----------------------------------------- |
+| `-dit`                                                   | Detached + interactive terminal           |
+| `--name ubuntu-container`                                | Container name                            |
+| `--hostname ubuntu-dev`                                  | Hostname inside container                 |
+| `--restart unless-stopped`                               | Auto‑restart policy                       |
+| `--cpus="2"`                                             | CPU limit                                 |
+| `--memory="4g"`                                          | Memory limit                              |
+| `--mount type=bind,source=/tmp/ubuntu-data,target=/data` | Persistent storage                        |
+| `-v /var/run/docker.sock:/var/run/docker.sock`           | Docker access inside container (optional) |
+| `-p 2222:22`                                             | SSH port mapping                          |
+| `-p 8080:80`                                             | Web service port                          |
+| `--env TZ=Asia/Kolkata`                                  | Timezone                                  |
+| `--env LANG=en_US.UTF-8`                                 | Locale                                    |
+| `ubuntu:latest /bin/bash`                                | Ubuntu image + Bash                       |
+
+---
+
+## 🧪 Deployment Steps
+
+### **Step 1 – Initial Setup (root)**
+
+1. Create users: `Dev1`, `Dev2`, `Dev3`
+2. Create groups: `devops`, `aws`, `management`, `sales`
+3. Change primary group of `Dev2`, `Dev3` → `devops`
+4. Add `aws` as secondary group to `Dev1`
+5. Create directory & file structure (as per diagram)
+6. Change group of `/dir1`, `/dir8/dir9`, `/f2` → `devops`
+7. Change ownership of `/dir1`, `/dir8/dir9`, `/f2` → `Dev1`
+
+---
+
+### **Step 2 – Additional Users & Groups (root)**
+
+1. Create users: `Dev4`, `Dev5`
+2. Create groups: `app`, `database`
+
+---
+
+### **Step 3 – File Operations**
+
+1. **root**: Create file `/f3`
+2. **root**: Rename `/f2` → `/f4`
+3. **Dev4**: Move `/dir1/f1` → `/dir2/dir1/dir2`
+
+---
+
+### **Step 4 – Advanced Filesystem Tasks**
+
+1. **root**: Create `/home/Dev2/dir1`
+2. **root**: From `/dir2/dir1/dir2/dir10`, create `/opt/dir12/dir10/f1` using *relative path*
+3. **root**: Delete `/dir4` recursively
+4. **root**: Delete all child items under `/opt/dir12`
+5. **Dev1**: Move `/opt/dir12/dir10/f1` → `/home/Dev1`
+6. **root**: Write text to `/f3`
+
+---
+
+### **Step 5 – Text Processing & Cleanup**
+
+1. **root**: Create `/dir1/f2`
+2. **root**: Delete `/dir6`
+3. **root**: Delete `/dir8`
+4. **root**: Replace `DevOps` → `devops` in `/f3`
+5. **root**: Using `vi`, copy line 1 and paste it 10 times
+6. **root**: Replace `Engineer` → `engineer`
+7. **root**: Delete `/f3`
+
+---
+
+### **Step 6 – System Inspection (root)**
+
+1. Search file `f3` (absolute paths)
+2. Count files in `/`
+3. Print last line of `/etc/passwd`
+
+---
+
+### **Step 7 – Filesystem Verification**
+
+1. Verify filesystem usage using `df -h`
+2. Create `/data/f1`
+
+> ⚠️ **Docker Note**: `mount` / `umount` are restricted in standard Docker containers.
+
+---
+
+### **Step 8 – Final Cleanup (root)**
+
+1. Delete `/dir1`, `/dir2`, `/dir3`, `/dir5`, `/dir7`
+2. Delete `/f1`, `/f4`
+3. Delete `/opt/dir12`
+
+---
+
+### **Step 9 – User & Group Cleanup (root)**
+
+1. Delete users: `Dev1`, `Dev2`, `Dev3`, `Dev4`, `Dev5`
+2. Delete groups: `app`, `aws`, `database`, `devops`, `management`, `sales`
+3. Remove remaining home directories (if any)
+
+---
+
+## 🐳 Docker vs VM Compatibility
+
+| Feature             | Docker | VM / EC2 |
+| ------------------- | ------ | -------- |
+| Users & groups      | ✅      | ✅        |
+| Files & permissions | ✅      | ✅        |
+| Text processing     | ✅      | ✅        |
+| mount / umount      | ❌      | ✅        |
+
+---
+
+## 🔗 Connect with Me
+
+* **GitHub**: [https://github.com/piyush-pooh](https://github.com/piyush-pooh)
+* **LinkedIn**: [https://www.linkedin.com/in/piyush-sharma-5250a0291/](https://www.linkedin.com/in/piyush-sharma-5250a0291/)
+* **Twitter (X)**: [https://x.com/Piyush_poooh](https://x.com/Piyush_poooh)
+
+---
+
+## ⭐ Support the Project
+
+If this lab helped you **understand Linux the right way**, please ⭐ **star the repository** and share it 🚀
+
+> *LinuxOps mindset: Don’t fight Linux. Understand it.*
+
 
