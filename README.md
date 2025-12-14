@@ -1,12 +1,8 @@
-<p align="center">
-  <img src="https://i.imgur.com/YOUR_BANNER.jpg" alt="LinuxOps DevOps Project" width="90%">
-</p>
+![YOUR_BANNER](https://github.com/user-attachments/assets/29b89ea8-acf0-4b58-a33c-2e021328bcef)
 
-## 📐 Filesystem Architecture Diagram
+Filesystem Architecture Diagram
 
-<p align="center">
-  <img src="https://i.imgur.com/YOUR_DIAGRAM.jpg" alt="Linux Filesystem Diagram" width="85%">
-</p>
+![YOUR_DIAGRAM](https://github.com/user-attachments/assets/f619c450-2c27-4900-925e-373da69798bf)
 
 
 # **LinuxOps – DevOps Project**
